@@ -1,0 +1,40 @@
+#!/bin/bash
+juloadconfig=true
+#getopts
+while getopts t:c: FLAG; do
+	case $FLAG in
+		t) 
+			jutitle="$OPTARG" #TODO: create an array; append -t: to array.
+			printf "%s\n" "-t: is not yet implemented" >&2
+			;;
+		c)
+			juloadconfig=false
+			source "$OPTARG"
+			;;
+	esac
+done
+shift $((OPTIND-1))
+#load config. Do this after, in case the user supplied a special config file.
+if $juloadconfig && [ -f ~/.config/jekyll-upload.conf ]
+then
+	source ~/.config/jekyll-upload.conf
+else
+	junossh=true
+	jubuild=false
+fi
+while [ "$#" -ne 0 ]
+do
+	FILE=$1
+	judatestamp=$(date +%Y-%m-%d)
+	read -p "Title for $1? >" title
+	sanetitle=$(printf "%s" "$title" | sed -e 's/ /-/g' -e's/[^-a-zA-Z0-9]//g')
+	finaltitle=$(printf "%s-%s.%s" "$judatestamp" "$sanetitle" "${FILE##*.}")
+	if ! $junossh; then
+		scparg=$(printf "%s@%s:%s/%s" "$jusshname" "$jusshserver" "$jusshdir" "$finaltitle")
+		scp $FILE $scparg
+	fi
+	shift
+done
+if $jubuild && ! $junossh; then
+	ssh $jusshname@$jusshserver "cd $jbdir && jekyll build $jbargs"
+fi
