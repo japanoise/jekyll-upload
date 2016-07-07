@@ -9,6 +9,7 @@ Make the process of uploading files to your Jekyll blog easy as pie!
 
 ## Usage
 <code>$ jekyll-upload mypost.md
+
   $ jekyll-upload -c config.conf mypost.md</code>
 
 ## Planned features
