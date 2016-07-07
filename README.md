@@ -8,8 +8,8 @@ Make the process of uploading files to your Jekyll blog easy as pie!
 4. Put jekyll-upload somewhere on your $PATH.
 
 ## Usage
-  $ jekyll-upload mypost.md
-  $ jekyll-upload -c config.conf mypost.md
+<code>$ jekyll-upload mypost.md
+  $ jekyll-upload -c config.conf mypost.md</code>
 
 ## Planned features
 - Specify titles on command line
