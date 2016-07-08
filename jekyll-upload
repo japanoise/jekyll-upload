@@ -1,8 +1,15 @@
 #!/bin/bash
 juloadconfig=true
+judate=false
 prompt=false
+juverbose=false
+vprint () {
+	if $juverbose; then
+		printf "%s\n" "$1"
+	fi
+}
 #getopts
-while getopts t:c:p FLAG; do
+while getopts dvt:c:p FLAG; do
 	case $FLAG in
 		t) 
 			jutitle="$OPTARG" #TODO: create an array; append -t: to array.
@@ -14,6 +21,12 @@ while getopts t:c:p FLAG; do
 			;;
 		p)
 			prompt=true
+			;;
+		d)
+			judate=true
+			;;
+		v)
+			juverbose=true
 			;;
 	esac
 done
@@ -29,7 +42,12 @@ fi
 while [ "$#" -ne 0 ]
 do
 	FILE=$1
-	judatestamp=$(date +%Y-%m-%d)
+	judatestamp=$(date +%F)
+	if $judate && ! grep -qe"^date: " <"$FILE" ; then
+		gendate=$(date +"%F %T %z")
+		sed -ie "1 a date: $gendate" "$FILE"
+		vprint "$(printf \"%s: %s\n\" \"Generating date for $FILE\" \"$gendate\")"
+	fi
 	if $prompt; then
 		read -p "Title for $1? >" title
 	else
@@ -38,12 +56,15 @@ do
 	if [ "$title" = "" ]; then title="Untitled"; fi
 	sanetitle=$(printf "%s" "$title" | tr '[:upper:]' '[:lower:]' | sed -e 's/ /-/g' -e's/[^-a-zA-Z0-9]//g')
 	finaltitle=$(printf "%s-%s.%s" "$judatestamp" "$sanetitle" "${FILE##*.}")
+	vprint "Final title for $FILE is $finaltitle"
 	if ! $junossh; then
 		scparg=$(printf "%s@%s:%s/%s" "$jusshname" "$jusshserver" "$jusshdir" "$finaltitle")
+		vprint "scp $FILE $scparg"
 		scp $FILE $scparg
 	fi
 	shift
 done
 if $jubuild && ! $junossh; then
+	vprint "ssh $jusshname@$jusshserver \"cd $jbdir && jekyll build $jbargs\""
 	ssh $jusshname@$jusshserver "cd $jbdir && jekyll build $jbargs"
 fi
