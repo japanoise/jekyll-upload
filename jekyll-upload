@@ -45,7 +45,7 @@ do
 	judatestamp=$(date +%F)
 	if $judate && ! grep -qe"^date: " <"$FILE" ; then
 		gendate=$(date +"%F %T %z")
-		sed -ie "1 a date: $gendate" "$FILE"
+		sed -i -e "1 a date: $gendate" "$FILE"
 		vprint "Generating date for $FILE - $gendate"
 	fi
 	if $prompt; then
