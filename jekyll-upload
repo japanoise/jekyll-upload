@@ -1,7 +1,8 @@
 #!/bin/bash
 juloadconfig=true
+prompt=false
 #getopts
-while getopts t:c: FLAG; do
+while getopts t:c:p FLAG; do
 	case $FLAG in
 		t) 
 			jutitle="$OPTARG" #TODO: create an array; append -t: to array.
@@ -10,6 +11,9 @@ while getopts t:c: FLAG; do
 		c)
 			juloadconfig=false
 			source "$OPTARG"
+			;;
+		p)
+			prompt=true
 			;;
 	esac
 done
@@ -26,8 +30,13 @@ while [ "$#" -ne 0 ]
 do
 	FILE=$1
 	judatestamp=$(date +%Y-%m-%d)
-	read -p "Title for $1? >" title
-	sanetitle=$(printf "%s" "$title" | sed -e 's/ /-/g' -e's/[^-a-zA-Z0-9]//g')
+	if $prompt; then
+		read -p "Title for $1? >" title
+	else
+		title=$(sed -ne's/title: "\([^"]*\).*/\1/p' <"$FILE")
+	fi
+	if [ "$title" = "" ]; then title="Untitled"; fi
+	sanetitle=$(printf "%s" "$title" | tr '[:upper:]' '[:lower:]' | sed -e 's/ /-/g' -e's/[^-a-zA-Z0-9]//g')
 	finaltitle=$(printf "%s-%s.%s" "$judatestamp" "$sanetitle" "${FILE##*.}")
 	if ! $junossh; then
 		scparg=$(printf "%s@%s:%s/%s" "$jusshname" "$jusshserver" "$jusshdir" "$finaltitle")
