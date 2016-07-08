@@ -46,7 +46,7 @@ do
 	if $judate && ! grep -qe"^date: " <"$FILE" ; then
 		gendate=$(date +"%F %T %z")
 		sed -ie "1 a date: $gendate" "$FILE"
-		vprint "$(printf \"%s: %s\n\" \"Generating date for $FILE\" \"$gendate\")"
+		vprint "Generating date for $FILE - $gendate"
 	fi
 	if $prompt; then
 		read -p "Title for $1? >" title
