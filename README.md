@@ -3,9 +3,10 @@ Make the process of uploading files to your Jekyll blog easy as pie!
 
 ## Installation
 1. Clone this repo.
-2. Copy jekyll-upload.conf into ~/.config
-3. Edit ~/.config/jekyll.conf, making the necessary changes.
-4. Put jekyll-upload somewhere on your $PATH.
+2. Run install.sh or:
+3. Copy jekyll-upload.conf into ~/.config
+4. Edit ~/.config/jekyll.conf, making the necessary changes.
+5. Put jekyll-upload somewhere on your $PATH.
 
 ## Usage
 `$ jekyll-upload mypost.md`
