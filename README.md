@@ -10,12 +10,13 @@ Make the process of uploading files to your Jekyll blog easy as pie!
 ## Usage
 `$ jekyll-upload mypost.md`
 
-`$ jekyll-upload -c config.conf mypost.md`
+`$ jekyll-upload -p mypost.md #prompt for titles`
+
+`$ jekyll-upload -c config.conf mypost.md #use a custom config file`
 
 ## Planned features
 - Specify titles on command line
 - Specify dates on command line
-- Grab title from the first few lines automagically
 
 ## License
 GPLv3 or any later version.
