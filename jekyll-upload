@@ -3,6 +3,7 @@ juloadconfig=true
 judate=false
 prompt=false
 juverbose=false
+jekyll="jekyll"
 vprint () {
 	if $juverbose; then
 		printf "%s\n" "$1"
@@ -66,5 +67,5 @@ do
 done
 if $jubuild && ! $junossh; then
 	vprint "ssh $jusshname@$jusshserver \"cd $jbdir && jekyll build $jbargs\""
-	ssh $jusshname@$jusshserver "cd $jbdir && jekyll build $jbargs"
+	ssh $jusshname@$jusshserver "cd $jbdir && $jekyll build $jbargs"
 fi
