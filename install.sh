@@ -1,5 +1,9 @@
 #!/bin/bash
 # Very simple, slightly stupid install script
+echo "Making ~/.config/..."
+mkdir --parents --verbose ~/.config
+echo "Copying jekyll-upload.conf..."
+cp --verbose --interactive jekyll-upload.conf ~/.config/
 printf "%s\n%s\n" "jekyll-install will be installed momentarily!" "I just need to ask you a few questions about the install."
 echo "Would you like me to use a symlink? This means if you update the script here by using git pull, there will be no need to reinstall"
 asking=true
@@ -16,7 +20,7 @@ while $asking; do
 			;;
 	esac
 done
-($symlink && echo "OK, using a symlink.") || echo "OK, hard copying."
+if $symlink; then echo "OK, using a symlink."; else echo "OK, hard copying."; fi
 havebin=$(sed -ne'/~\/bin/p' -e"/\\/home\\/$(whoami)\\/bin/p" <<EOF
 $PATH
 EOF
