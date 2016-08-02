@@ -53,3 +53,4 @@ while $asking; do
 			;;
 	esac
 done
+$run && command $comm
